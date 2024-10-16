@@ -6,6 +6,15 @@ export default function Home() {
   const [ characterCount, setCharacterCount ] = useState(0)
   const [ input, setInput ] = useState("")
 
+  const colors = [
+    'bg-red-200',
+    'bg-blue-200',
+    'bg-green-200',
+    'bg-yellow-200',
+    'bg-purple-200',
+    'bg-pink-200',
+  ]
+
   useEffect(() => {
     if (input.length > 0){
       setCharacterCount(input.length) // count characters
@@ -23,13 +32,22 @@ export default function Home() {
 
 
   function tokenizeText(text){
+    const tokens = text.match(/.{1,4}/g) || []
+    return tokens.map((token, index) => (
+      <span
+        key={index}
+        className={`px-1 ${colors[index % colors.length]} rounded-md mx-1`}
+      >
+        {token}
+      </span>
+    ));
     return text
       .replace(/(.{4})/g, '$1|') // Add '||' after every 4 characters
       .replace(/\|\|$/, ''); // Remove the last '||' if it exists
   }
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center relative py-4">
+    <div className="w-full h-full flex flex-col justify-center items-center relative py-4 px-2">
       <h2 className="text-md text-gray-700 text-4xl font-bold mb-10">Gemini API Tokenizer</h2>
       <div className="flex flex-row items-center mb-4">
         <button type="button" className="bg-gray-50 hover:bg-gray-100 font-bold text-gray-600 hover:text-gray-700 px-2 py-2 text-sm rounded-lg mr-2">Gemini 1.5 Flash</button>
@@ -37,14 +55,17 @@ export default function Home() {
         <button type="button" className="bg-gray-50 hover:bg-gray-100 font-bold text-gray-600 hover:text-gray-700 px-2 py-2 text-sm rounded-lg mr-2">Gemini 1.5 Pro</button>
         <button type="button" className="bg-gray-50 hover:bg-gray-100 font-bold text-gray-600 hover:text-gray-700 px-2 py-2 text-sm rounded-lg">Text Embedding & Embedding</button>
       </div>
-      <textarea placeholder="Write or paste your text here to count tokens and characters" value={input} onChange={e => setInput(e.target.value)} className="w-full sm:w-3/4 md:w-2/3 xl:w-1/2 2xl:w-1/3 outline-none italic h-80 text-gray-700 font-semibold border-2 text-lg border-gray-500 rounded-xl p-2 mb-6">
+      <textarea placeholder="Write or paste your text here to count tokens and characters" value={input} onChange={e => setInput(e.target.value)} className="w-full focus:border-gray-900 sm:w-3/4 md:w-2/3 xl:w-1/2 2xl:w-1/3 outline-none italic h-80 text-gray-700 font-semibold border-2 text-lg border-gray-500 rounded-xl p-2 mb-6">
 
       </textarea>
       <div className="flex flex-row items-center justify-start">
         <p className="mr-8 text-xl bg-gray-100 font-semibold rounded-md px-3 py-2">Tokens: {tokenCount}</p>
         <p className="text-xl bg-gray-100 font-semibold rounded-md px-3 py-2">Characters: {characterCount}</p>
       </div>
-      <div id="tokenized_text" className="mt-6 w-1/3 h-auto p-2 bg-gray-50 rounded-xl">
+      <div className="flex flex-row justify-start w-full sm:w-3/4 md:w-2/3 xl:w-1/2 2xl:w-1/3">
+        <p className="mb-3 mt-6 text-xl font-bold">Tokenized version 👇</p>
+      </div>
+      <div id="tokenized_text" className="w-full sm:w-3/4 md:w-2/3 xl:w-1/2 2xl:w-1/3 h-80 overflow-auto p-2 bg-gray-50 rounded-xl">
        {
         input.length > 0 
         ? 
