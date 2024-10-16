@@ -2,37 +2,58 @@ import { useEffect, useState } from 'react'
 
 export default function Home() {
 
-  const [ tokens, setTokens ] = useState(0)
-  const [ characters, setCharacters ] = useState(0)
+  const [ tokenCount, setTokenCount ] = useState(0)
+  const [ characterCount, setCharacterCount ] = useState(0)
   const [ input, setInput ] = useState("")
 
   useEffect(() => {
     if (input.length > 0){
-      setCharacters(input.length) // count characters
-      setTokens(Math.floor(input.length/4)) // count tokens, each token is 4 characters
+      setCharacterCount(input.length) // count characters
+      setTokenCount(Math.floor(input.length/4)) // count tokens, each token is 4 characters
+      let tokens = []
+      for (let i = 0; i < input.length-1; i+=4){
+        tokens.push(input.slice(i, i+4))
+      }
+      console.log(tokens)
     } else {
-      setCharacters(0)
-      setTokens(0)
+      setCharacterCount(0)
+      setTokenCount(0)
     }
-  }, [input, characters, tokens])
+  }, [input, characterCount, tokenCount])
+
+
+  function tokenizeText(text){
+    return text
+      .replace(/(.{4})/g, '$1|') // Add '||' after every 4 characters
+      .replace(/\|\|$/, ''); // Remove the last '||' if it exists
+  }
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center absolute py-4">
-      <h2 className="text-md text-gray-700 text-4xl font-bold mb-4">Gemini API Tokenizer</h2>
+    <div className="w-full h-full flex flex-col justify-center items-center relative py-4">
+      <h2 className="text-md text-gray-700 text-4xl font-bold mb-10">Gemini API Tokenizer</h2>
       <div className="flex flex-row items-center mb-4">
-        <button type="button" className="bg-gray-50 hover:bg-gray-100 font-bold text-gray-600 hover:text-gray-700 px-3 py-2 text-sm rounded-lg mr-2">Gemini 1.5 Flash</button>
-        <button type="button" className="bg-gray-50 hover:bg-gray-100 font-bold text-gray-600 hover:text-gray-700 px-3 py-2 text-sm rounded-lg mr-2">Gemini 1.5 Flash8B</button>
-        <button type="button" className="bg-gray-50 hover:bg-gray-100 font-bold text-gray-600 hover:text-gray-700 px-3 py-2 text-sm rounded-lg mr-2">Gemini 1.5 Pro</button>
-        <button type="button" className="bg-gray-50 hover:bg-gray-100 font-bold text-gray-600 hover:text-gray-700 px-3 py-2 text-sm rounded-lg">Text Embedding & Embedding</button>
+        <button type="button" className="bg-gray-50 hover:bg-gray-100 font-bold text-gray-600 hover:text-gray-700 px-2 py-2 text-sm rounded-lg mr-2">Gemini 1.5 Flash</button>
+        <button type="button" className="bg-gray-50 hover:bg-gray-100 font-bold text-gray-600 hover:text-gray-700 px-2 py-2 text-sm rounded-lg mr-2">Gemini 1.5 Flash8B</button>
+        <button type="button" className="bg-gray-50 hover:bg-gray-100 font-bold text-gray-600 hover:text-gray-700 px-2 py-2 text-sm rounded-lg mr-2">Gemini 1.5 Pro</button>
+        <button type="button" className="bg-gray-50 hover:bg-gray-100 font-bold text-gray-600 hover:text-gray-700 px-2 py-2 text-sm rounded-lg">Text Embedding & Embedding</button>
       </div>
-      <textarea placeholder="Write or paste your text here to count tokens and characters" value={input} onChange={e => setInput(e.target.value)} className="w-1/3 outline-none italic h-80 text-gray-700 font-semibold border-2 text-lg border-gray-500 rounded-xl p-2 mb-6">
+      <textarea placeholder="Write or paste your text here to count tokens and characters" value={input} onChange={e => setInput(e.target.value)} className="w-full sm:w-3/4 md:w-2/3 xl:w-1/2 2xl:w-1/3 outline-none italic h-80 text-gray-700 font-semibold border-2 text-lg border-gray-500 rounded-xl p-2 mb-6">
 
       </textarea>
       <div className="flex flex-row items-center justify-start">
-        <p className="mr-8 text-xl bg-gray-200 rounded-md px-3 py-2">Tokens: {tokens}</p>
-        <p className="text-xl bg-gray-200 rounded-md px-3 py-2">Characters: {characters}</p>
+        <p className="mr-8 text-xl bg-gray-100 font-semibold rounded-md px-3 py-2">Tokens: {tokenCount}</p>
+        <p className="text-xl bg-gray-100 font-semibold rounded-md px-3 py-2">Characters: {characterCount}</p>
       </div>
-      <div id="faq" className="mt-8">
+      <div id="tokenized_text" className="mt-6 w-1/3 h-auto p-2 bg-gray-50 rounded-xl">
+       {
+        input.length > 0 
+        ? 
+          <p className="italic text-gray-700 text-lg">{tokenizeText(input)}</p>
+        : 
+          <p className="italic text-gray-700 text-lg">Your tokenized text will appear here...</p>
+       }
+      </div>
+      <div id="faqs" className="mt-8">
         <div id="q1" className="mb-4">
           <p id="question1" className="text-xl font-bold mb-2">How are tokens counted?</p>
           <p id="answer1">A token is equivalent to about 4 characters of English text for Gemini models.</p>
