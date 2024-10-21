@@ -18,18 +18,38 @@ export default function Home() {
   useEffect(() => {
     if (input.length > 0){
       setCharacterCount(input.length) // count characters
-      setTokenCount(Math.floor(input.length/4)) // count tokens, each token is 4 characters
-      let tokens = []
-      for (let i = 0; i < input.length-1; i+=4){
-        tokens.push(input.slice(i, i+4))
-      }
-      console.log(tokens)
+      
     } else {
       setCharacterCount(0)
-      setTokenCount(0)
     }
-  }, [input, characterCount, tokenCount])
+  }, [input, characterCount])
 
+  async function countTokens(text){
+    try {
+      const response = await fetch("http://localhost:5000/count-tokens", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt: text })
+      })
+
+      if (!response.ok){
+        throw new Error('Error counting tokens')
+      }
+
+      const data = await response.json()
+      setTokenCount(data.token_count)
+    } catch (error) {
+      console.error("Error: ", error)
+    }
+  }
+
+  useEffect(() => {
+    if (input){
+      countTokens(input)
+    }
+  }, [input])
 
   function tokenizeText(text){
     const tokens = text.match(/.{1,4}/g) || []
