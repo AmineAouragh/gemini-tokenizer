@@ -24,8 +24,8 @@ def count_tokens():
         return jsonify({ "error": "Prompt is missing" }), 400
     
     try:
-        response = genai.count_tokens([prompt])
-        token_count = response['token_count']
+        response = model.count_tokens([prompt])
+        token_count = response.total_tokens
         return jsonify({ "token_count": token_count })
     except Exception as e:
         return jsonify({ "error", str(e) }), 500
