@@ -69,7 +69,7 @@ export default function Home() {
        {
         input.length > 0 
         ? 
-          <p className="italic text-gray-700 text-lg">{tokenizeText(input)}</p>
+          <p className="flex flex-wrap italic text-gray-700 text-lg">{tokenizeText(input)}</p>
         : 
           <p className="italic text-gray-700 text-lg">Your tokenized text will appear here...</p>
        }
