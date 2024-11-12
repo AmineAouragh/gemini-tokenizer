@@ -31,7 +31,7 @@ export default function Home() {
     const startTime = Date.now()
 
     try {
-      const response = await fetch("http://localhost:5000/count-tokens", {
+      const response = await fetch("https://gemini-tokenizer.onrender.com/count-tokens", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
