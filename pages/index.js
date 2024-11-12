@@ -5,6 +5,8 @@ export default function Home() {
   const [ tokenCount, setTokenCount ] = useState(0)
   const [ characterCount, setCharacterCount ] = useState(0)
   const [ input, setInput ] = useState("")
+  const [ responseTime, setResponseTime ] = useState(null)
+  const [ tokenizedText, setTokenizedText ] = useState([])
 
   const colors = [
     'bg-red-200',
@@ -25,6 +27,9 @@ export default function Home() {
   }, [input, characterCount])
 
   async function countTokens(text){
+
+    const startTime = Date.now()
+
     try {
       const response = await fetch("http://localhost:5000/count-tokens", {
         method: 'POST',
@@ -40,6 +45,12 @@ export default function Home() {
 
       const data = await response.json()
       setTokenCount(data.token_count)
+
+      const endTime = Date.now()
+      const elapsedTime = endTime - startTime
+      setResponseTime(elapsedTime)
+      console.log(elapsedTime)
+
     } catch (error) {
       console.error("Error: ", error)
     }
@@ -48,11 +59,18 @@ export default function Home() {
   useEffect(() => {
     if (input){
       countTokens(input)
+    } else {
+      setTokenCount(0)
     }
-  }, [input])
+  }, [input, tokenCount])
 
   function tokenizeText(text){
-    const tokens = text.match(/.{1,4}/g) || []
+    const approximateTokenLength = Math.ceil(characterCount/tokenCount)
+    const tokens = []
+    for (let i = 0; i < characterCount; i += approximateTokenLength){
+      tokens.push(text.slice(i, i + approximateTokenLength))
+    }
+
     return tokens.map((token, index) => (
       <span
         key={index}
@@ -61,9 +79,6 @@ export default function Home() {
         {token}
       </span>
     ));
-    return text
-      .replace(/(.{4})/g, '$1|') // Add '||' after every 4 characters
-      .replace(/\|\|$/, ''); // Remove the last '||' if it exists
   }
 
   return (
