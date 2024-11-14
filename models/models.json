@@ -1,0 +1,53 @@
+[
+    {
+        "name": "gemini-1.5-flash",
+        "input_token_limit": 1048576,
+        "output_token_limit": 8192,
+        "less_than_128k_tokens": {
+            "input_pricing": "$0.075 / 1 million tokens", 
+            "input_pricing_numeric": 0.075,
+            "output_pricing": "$0.30 / 1 million tokens",
+            "output_pricing_numeric": 0.3
+        },
+        "more_than_128k_tokens": {
+            "input_pricing": "$0.15 / 1 million tokens",
+            "input_pricing_numeric": 0.15,
+            "output_pricing": "$0.60 / 1 million tokens",
+            "output_pricing_numeric": 0.6
+        }
+    },
+    {
+        "name": "gemini-1.5-flash8b",
+        "input_token_limit": 1048576,
+        "output_token_limit": 8192,
+        "less_than_128k_tokens": {
+            "input_pricing": "$0.0375 / 1 million tokens",
+            "input_pricing_numeric": 0.0375,
+            "output_pricing": "$0.15 / 1 million tokens",
+            "output_pricing_numeric": 0.15
+        },
+        "more_than_128k_tokens": {
+            "input_pricing": "$0.075 / 1 million tokens",
+            "input_pricing_numeric": 0.075,
+            "output_pricing":"$0.30 / 1 million tokens",
+            "output_pricing_numeric": 0.3
+        }
+    },
+    {
+        "name": "gemini-1.5-pro",
+        "input_token_limit": 2097152,
+        "output_token_limit": 8192,
+        "less_than_128k_tokens": {
+            "input_pricing": "$1.25 / 1 million tokens",
+            "input_pricing_numeric": 1.25,
+            "output_pricing": "$5 / 1 million tokens",
+            "output_pricing_numeric": 5
+        },
+        "more_than_128k_tokens": {
+            "input_pricing": "$2.5 / 1 million tokens",
+            "input_pricing_numeric": 2.5,
+            "output_pricing": "$10 / 1 million tokens",
+            "output_pricing_numeric": 10
+        }
+    }
+]
